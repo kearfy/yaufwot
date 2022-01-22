@@ -7,7 +7,7 @@ const configOptions = {
         "prefix"
     ],
     bool: [
-        "test"
+        
     ]
 }
 
@@ -177,17 +177,61 @@ export default class Ping extends Command {
                         }
                         break;
                     case 'toggle':
-
+                        if (split[1]) {
+                            if (configOptions.bool.includes(split[1])) {
+                                const old = await gconf.get(split[1]);
+                                const value = !(old);
+                                await gconf.set(split[1], value);
+                                var embed = new Discord.MessageEmbed({
+                                    title: "⚙️ Updated!",
+                                    description: "Option `" + split[1].toLowerCase() + "` has been updated!",
+                                    fields: [
+                                        {
+                                            name: "Old value",
+                                            value: "`" + (old  ? 'true' : 'false') + "`",
+                                            inline: true
+                                        },
+                                        {
+                                            name: "New value",
+                                            value: "`" + (value ? 'true' : 'false') + "`",
+                                            inline: true
+                                        }
+                                    ]
+                                });
+                            } else {
+                                var embed = new Discord.MessageEmbed({
+                                    title: "❌ Unknown option",
+                                    description: "Check available options with `" + prefix + "config options`."
+                                });
+                            }
+                        } else {
+                            var embed = new Discord.MessageEmbed({
+                                title: "❌ Missing option",
+                                description: "Correct usage: `" + prefix + "config toggle [option]`."
+                            });
+                        }
                         break;
                     case 'options':
-
+                        var embed = new Discord.MessageEmbed({
+                            title: "⚙️ Available options",
+                            description: "Normal options can be set with the `set` actions. Booleans can be toggled with the `toggle` action.",
+                            fields: [
+                                {
+                                    name: "Options",
+                                    value: (configOptions.value.length > 0 ? configOptions.value.map(opt => '`' + opt + '`').join(' ') : 'None')
+                                },
+                                {
+                                    name: "Booleans",
+                                    value: (configOptions.bool.length > 0 ? configOptions.bool.map(opt => '`' + opt + '`').join(' ') : 'None')
+                                }
+                            ]
+                        });
                         break;
                     default:
                         var embed = new Discord.MessageEmbed({
                             title: "❌ Unknown action",
-                            description: "The requested action does not exist."
+                            description: "Use: `" + prefix + "config` to get a list of actions."
                         });
-
                         break;
                 }
             }
