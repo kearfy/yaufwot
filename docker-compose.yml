@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  yaufwot:
+    build: ./
+    restart: unless-stopped
+    ports:
+      - ${WEB_PORT:-8080}:80
+    depends_on:
+      - "mongo"
+    environment:
+      MONGO_USERNAME: ${MONGO_USERNAME:-root}
+      MONGO_PASSWORD: ${MONGO_PASSWORD:-password}
+      MONGO_HOSTNAME: ${MONGO_HOSTNAME:-mongo}
+      MONGO_DATABASE: ${MONGO_DATABASE:-yaufwot}
+      MONGO_PORT: ${MONGO_PORT:-27017}
+
+  mongo:
+    image: mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-password}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE:-yaufwot}
+    volumes:
+      - yaufwot-mongo-db:/data/db
+
+volumes:
+  yaufwot-mongo-db:

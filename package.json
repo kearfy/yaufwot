@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "discord.js": "^13.3.1",
+    "dotenv": "^10.0.0",
+    "glob": "^7.2.0",
+    "mongodb": "^4.1.4"
+  },
+  "type": "module",
+  "name": "yaufwot",
+  "version": "1.0.0",
+  "description": "Yet Another Useless Fucking Waste Of Time",
+  "main": "source/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kearfy/yaufwot.git"
+  },
+  "author": "Micha de Vries",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/kearfy/yaufwot/issues"
+  },
+  "homepage": "https://github.com/kearfy/yaufwot#readme"
+}
