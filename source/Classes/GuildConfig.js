@@ -33,8 +33,8 @@ export default class GuildConfig {
                             id: guildId
                         }));
 
-                        if (toBeCached.includes(property)) CachedConfig.guilds[guildId][property] = this.properties[property];
-                        resolve(this.properties[property]);
+                        if (toBeCached.includes(property)) CachedConfig.guilds[guildId][property] = defaultGuildProperties[property];
+                        resolve(defaultGuildProperties[property]);
                     } else {
                         if (toBeCached.includes(property)) CachedConfig.guilds[guildId][property] = item[property];
                         resolve(item[property]);
