@@ -135,7 +135,46 @@ export default class Ping extends Command {
                         }
                         break;
                     case 'set':
-
+                        if (split[1]) {
+                            if (split[2]) {
+                                if (configOptions.value.includes(split[1])) {
+                                    const old = await gconf.get(split[1]);
+                                    const value = split.slice(2).join(' ');
+                                    await gconf.set(split[1], value);
+                                    var embed = new Discord.MessageEmbed({
+                                        title: "⚙️ Updated!",
+                                        description: "Option `" + split[1].toLowerCase() + "` has been updated!",
+                                        fields: [
+                                            {
+                                                name: "Old value",
+                                                value: "`" + old + "`",
+                                                inline: true
+                                            },
+                                            {
+                                                name: "New value",
+                                                value: "`" + value + "`",
+                                                inline: true
+                                            }
+                                        ]
+                                    });
+                                } else {
+                                    var embed = new Discord.MessageEmbed({
+                                        title: "❌ Unknown option",
+                                        description: "Check available options with `" + prefix + "config options`."
+                                    });
+                                }
+                            } else {
+                                var embed = new Discord.MessageEmbed({
+                                    title: "❌ Missing value",
+                                    description: "Correct usage: `" + prefix + "config set [option] [value]`."
+                                });
+                            }
+                        } else {
+                            var embed = new Discord.MessageEmbed({
+                                title: "❌ Missing option and value",
+                                description: "Correct usage: `" + prefix + "config set [option] [value]`."
+                            });
+                        }
                         break;
                     case 'toggle':
 

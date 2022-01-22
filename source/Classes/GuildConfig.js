@@ -3,7 +3,6 @@ import path from 'path';
 import { Database } from './Database.js';
 
 const defaultGuildProperties = JSON.parse(fs.readFileSync(path.dirname('') + '/defaultGuildProperties.json'));
-
 const toBeCached = ['prefix'];
 
 class CachedConfig {
@@ -46,6 +45,29 @@ export default class GuildConfig {
     }
 
     async set(property, value) {
-        this.properties[property] = value;
+        const guildId = this.guildId;
+        property = property.toLowerCase();
+        if (toBeCached.includes(property)) CachedConfig.guilds[guildId][property] = value;
+        const col = Database.collection('guilds');
+        return new Promise(resolve => {
+            col.findOne({
+                'id': guildId
+            }, function(err, item) {
+                if (!item) {
+                    var props = {id: guildId};
+                    props[property] = value;
+                    col.insertOne(Object.assign({}, defaultGuildProperties, props));
+                    resolve(true);
+                } else {
+                    var update = {};
+                    update[property] = value;
+                    col.updateOne({
+                        'id': guildId
+                    }, {$set:update}, function(err, result) {
+                        resolve(true);
+                    });
+                }
+            });
+        });
     }
 }
