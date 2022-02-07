@@ -177,10 +177,55 @@ export default class Ping extends Command {
                         }
                         break;
                     case 'toggle':
-
+                        if (split[1]) {
+                            if (configOptions.bool.includes(split[1])) {
+                                const old = await gconf.get(split[1]);
+                                const value = !(old);
+                                await gconf.set(split[1], value);
+                                var embed = new Discord.MessageEmbed({
+                                    title: "⚙️ Updated!",
+                                    description: "Option `" + split[1].toLowerCase() + "` has been updated!",
+                                    fields: [
+                                        {
+                                            name: "Old value",
+                                            value: "`" + old + "`",
+                                            inline: true
+                                        },
+                                        {
+                                            name: "New value",
+                                            value: "`" + value + "`",
+                                            inline: true
+                                        }
+                                    ]
+                                });
+                            } else {
+                                var embed = new Discord.MessageEmbed({
+                                    title: "❌ Unknown option",
+                                    description: "Check available options with `" + prefix + "config options`."
+                                });
+                            }
+                        } else {
+                            var embed = new Discord.MessageEmbed({
+                                title: "❌ Missing option and value",
+                                description: "Correct usage: `" + prefix + "config set [option] [value]`."
+                            });
+                        }
                         break;
                     case 'options':
-
+                        var embed = new Discord.MessageEmbed({
+                            title: "⚙️ Available options",
+                            description: "\"Normal\" options can be updated with set, togglables should be updated with toggle.",
+                            fields: [
+                                {
+                                    name: "Options",
+                                    value: '`' + configOptions.value.join('`,`') + '`'
+                                },
+                                {
+                                    name: "Togglables",
+                                    value: '`' + configOptions.bool.join('`,`') + '`'
+                                }
+                            ]
+                        });
                         break;
                     default:
                         var embed = new Discord.MessageEmbed({
