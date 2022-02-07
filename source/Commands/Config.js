@@ -7,7 +7,7 @@ const configOptions = {
         "prefix"
     ],
     bool: [
-        "test"
+        
     ]
 }
 
@@ -188,12 +188,12 @@ export default class Ping extends Command {
                                     fields: [
                                         {
                                             name: "Old value",
-                                            value: "`" + old + "`",
+                                            value: "`" + (old  ? 'true' : 'false') + "`",
                                             inline: true
                                         },
                                         {
                                             name: "New value",
-                                            value: "`" + value + "`",
+                                            value: "`" + (value ? 'true' : 'false') + "`",
                                             inline: true
                                         }
                                     ]
@@ -206,23 +206,23 @@ export default class Ping extends Command {
                             }
                         } else {
                             var embed = new Discord.MessageEmbed({
-                                title: "❌ Missing option and value",
-                                description: "Correct usage: `" + prefix + "config set [option] [value]`."
+                                title: "❌ Missing option",
+                                description: "Correct usage: `" + prefix + "config toggle [option]`."
                             });
                         }
                         break;
                     case 'options':
                         var embed = new Discord.MessageEmbed({
                             title: "⚙️ Available options",
-                            description: "\"Normal\" options can be updated with set, togglables should be updated with toggle.",
+                            description: "Normal options can be set with the `set` actions. Booleans can be toggled with the `toggle` action.",
                             fields: [
                                 {
                                     name: "Options",
-                                    value: '`' + configOptions.value.join('`,`') + '`'
+                                    value: (configOptions.value.length > 0 ? configOptions.value.map(opt => '`' + opt + '`').join(' ') : 'None')
                                 },
                                 {
-                                    name: "Togglables",
-                                    value: '`' + configOptions.bool.join('`,`') + '`'
+                                    name: "Booleans",
+                                    value: (configOptions.bool.length > 0 ? configOptions.bool.map(opt => '`' + opt + '`').join(' ') : 'None')
                                 }
                             ]
                         });
@@ -230,9 +230,8 @@ export default class Ping extends Command {
                     default:
                         var embed = new Discord.MessageEmbed({
                             title: "❌ Unknown action",
-                            description: "The requested action does not exist."
+                            description: "Use: `" + prefix + "config` to get a list of actions."
                         });
-
                         break;
                 }
             }
